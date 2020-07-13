@@ -22,7 +22,9 @@ var setup = () => {
         container.appendChild(newDiv);
     }
 };
-
+var reset = () => {
+    setup();
+}
 document.addEventListener("DOMContentLoaded", () => {
     setup();
 });
@@ -38,8 +40,8 @@ var draw = () => {
 };
 var redraw = (i, j) => {
     //TODO -> change color of bars at i and j
-    document.getElementById('' + i).style.backgroundColor = "red";
-    document.getElementById('' + minInd).style.backgroundColor = "red";
+    // document.getElementById('' + i).style.backgroundColor = "red";
+    //document.getElementById('' + j).style.backgroundColor = "red";
     let temp = document.getElementById("" + i).style.height;
     document.getElementById("" + i).style.height = document.getElementById("" + j).style.height;
     document.getElementById("" + j).style.height = temp;
@@ -58,12 +60,17 @@ var selectionSort = () => {
         heights[i] = heights[minInd];
         heights[minInd] = temp;
 
+       
         setTimeout(() => {
-
+            document.getElementById('' + i).style.backgroundColor = "red";
+            document.getElementById('' + minInd).style.backgroundColor = "red";
             redraw(i, minInd);
+
+        }, i * 1000)
+        setTimeout(() => {
             document.getElementById('' + i).style.backgroundColor = "blue";
             document.getElementById('' + minInd).style.backgroundColor = "blue";
-        }, i * 1000);
+        }, (i + 1) * 1000)
 
     }
 };
