@@ -1,8 +1,22 @@
 let heights = []; //Change bars with user
 //Different sort algos
 //change speed
-let bars = 70;
+let start = true;
+let bars = 50;
+let str = document.cookie
+let speed = "slow";
+
+//ars = str.slice(5, str.indexOf(';'))
+console.log(speed);
+//speed = str.slice(str.indexOf('speed') + 6)
+console.log(bars);
+const NE = document.getElementById('numElements');
+const SPEED = document.getElementById('speed');
 const container = document.getElementById("container");
+let stop = false;
+let START = true;
+NE.value = bars;
+SPEED.value = speed
 const width = window.innerWidth;
 var setHeights = () => {
     heights = [];
@@ -10,9 +24,25 @@ var setHeights = () => {
         heights.push(Math.random() * bars + 20);
     }
 };
+NE.addEventListener('change', () => {
+    
+
+    if(parseInt(NE.value)!= bars){
+        document.cookie = "bars=" + parseInt(NE.value);
+        bars = parseInt(NE.value);
+        console.log(bars);
+        reset();
+    }
+});
+SPEED.addEventListener('change', () => {
+    speed = SPEED.value;
+    document.cookie = "speed=" + speed;
+    console.log(speed);
+})
 console.log(heights);
 var setup = () => {
     setHeights();
+    container.querySelectorAll('*').forEach(n => n.remove());
     for (let i = 0; i < bars; i++) {
         const newDiv = document.createElement("div");
         newDiv.id = i;
@@ -23,13 +53,25 @@ var setup = () => {
     }
 };
 var reset = () => {
+    stop = true;
     setup();
+    stop = false;
 }
 document.addEventListener("DOMContentLoaded", () => {
+    console.log('loaded');
     setup();
 });
 document.getElementsByClassName("SSort")[0].addEventListener("click", () => {
-    selectionSort();
+    if(start){
+        start = false;
+        new Promise((resolve, reject) => {
+            selectionSort();
+        }).then(() => {
+            start = true;
+            resolve();
+        })    
+    }
+    
     //visualize(moves);
 });
 var draw = () => {
@@ -38,16 +80,25 @@ var draw = () => {
         curr.style.height = heights[i];
     }
 };
+document.getElementsByClassName('reset')[0].addEventListener('click', () => {
+    setup();
+})
 var redraw = (i, j) => {
-    //TODO -> change color of bars at i and j
+
     // document.getElementById('' + i).style.backgroundColor = "red";
     //document.getElementById('' + j).style.backgroundColor = "red";
     let temp = document.getElementById("" + i).style.height;
     document.getElementById("" + i).style.height = document.getElementById("" + j).style.height;
     document.getElementById("" + j).style.height = temp;
 };
+var getNum = (speed) => {
+    return (speed=='slow') ? 1500 : ((speed=='medium') ? 1000 : ((speed=='fast') ? 500 : (speed=="veryfast") ? 150 : 50));
+}
 var selectionSort = () => {
     for (let i = 0; i < heights.length; i++) {
+        if(stop){
+            break;
+        }
         let min = 500;
         let minInd = i;
         for (let j = i; j < heights.length; j++) {
@@ -66,11 +117,11 @@ var selectionSort = () => {
             document.getElementById('' + minInd).style.backgroundColor = "red";
             redraw(i, minInd);
 
-        }, i * 1000)
+        }, i * getNum(speed))
         setTimeout(() => {
             document.getElementById('' + i).style.backgroundColor = "blue";
             document.getElementById('' + minInd).style.backgroundColor = "blue";
-        }, (i + 1) * 1000)
+        }, (i + 1) * getNum(speed))
 
     }
 };
