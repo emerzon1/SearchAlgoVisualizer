@@ -1,6 +1,12 @@
 let heights = []; //Change bars with user
 //Different sort algos
 //change speed
+if (document.cookie.indexOf('bars') == -1) {
+    document.cookie = 'bars=50';
+}
+if (document.cookie.indexOf('speed') == -1) {
+    document.cookie = 'speed=slow';
+}
 let start = true;
 let bars = 50;
 let str = document.cookie
@@ -25,10 +31,88 @@ var setHeights = () => {
         heights.push(Math.random() * bars + 20);
     }
 };
-NE.addEventListener('change', () => {
-    
+document.getElementById('heapSort').addEventListener('click', () => {
+    if (start) {
+        start = false;
+        heapSort();
+    }
 
-    if(parseInt(NE.value)!= bars){
+
+})
+let swaps = 0;
+async function maxHeap(i) {
+    const left = 2 * i + 1
+    const right = 2 * i + 2
+    let max = i
+
+    if (left < arrLength && heights[left] > heights[max]) {
+        max = left
+    }
+
+    if (right < arrLength && heights[right] > heights[max]) {
+        max = right
+    }
+
+    if (max != i) {
+        await swap(i, max)
+        await maxHeap(max)
+    }
+}
+
+async function swap(indexA, indexB) {
+    const temp = heights[indexA]
+
+    heights[indexA] = heights[indexB]
+    heights[indexB] = temp
+    setTimeout(() => {
+        if (!stop) {
+            document.getElementById('' + indexB).style.backgroundColor = "red";
+            document.getElementById('' + indexA).style.backgroundColor = "red";
+            redraw(indexA, indexB);
+        }
+
+    }, swaps * getNum(speed))
+
+    setTimeout(() => {
+        if (!stop) {
+            document.getElementById('' + indexA).style.backgroundColor = "blue";
+            document.getElementById('' + indexB).style.backgroundColor = "blue";
+        }
+    }, (swaps + 1) * getNum(speed)) 
+    swaps++;
+
+}
+
+async function heapSort() {
+    arrLength = heights.length
+
+    for (let i = Math.floor(arrLength / 2); i >= 0; i -= 1) {
+        await maxHeap(i)
+    }
+
+    for (i = heights.length - 1; i > 0; i--) {
+        await swap(0, i);
+        arrLength--;
+
+        await maxHeap(0);
+    }
+    return
+}
+
+
+/*document.getElementById('mergeSort').addEventListener('click', () => {
+    if (start) {
+        start = false;
+        quickSort();
+    }
+
+
+})*/
+
+NE.addEventListener('change', () => {
+
+
+    if (parseInt(NE.value) != bars) {
         document.cookie = "bars=" + parseInt(NE.value);
         bars = parseInt(NE.value);
         console.log(bars);
@@ -38,9 +122,9 @@ NE.addEventListener('change', () => {
 SPEED.addEventListener('change', () => {
     speed = SPEED.value;
     document.cookie = "speed=" + speed;
-    console.log(speed);
+    //console.log(speed);
 })
-console.log(heights);
+//console.log(heights);
 var setup = () => {
     setHeights();
     container.querySelectorAll('*').forEach(n => n.remove());
@@ -62,21 +146,20 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.getElementsByClassName("SSort")[0].addEventListener("click", () => {
-    if(start){
+    if (start) {
         start = false;
-        new Promise(async function(resolve, reject){
-            let b = await selectionSort();
-            console.log(b);
+        new Promise(async function (resolve, reject) {
+            await selectionSort();
+
         })
-        .then(() => {console.log('lol');})
-        .catch(() => {console.log('lol');start = true;})
+
         //.catch(() => {})
         //.then(() => {
         //    start = true;
 
         //})    
     }
-    
+
     //visualize(moves);
 });
 var draw = () => {
@@ -97,12 +180,12 @@ var redraw = (i, j) => {
     document.getElementById("" + j).style.height = temp;
 };
 var getNum = (speed) => {
-    return (speed=='slow') ? 1500 : ((speed=='medium') ? 1000 : ((speed=='fast') ? 500 : (speed=="veryfast") ? 150 : 50));
+    return (speed == 'slow') ? 1500 : ((speed == 'medium') ? 1000 : ((speed == 'fast') ? 500 : (speed == "veryfast") ? 150 : 50));
 }
 
 async function selectionSort() {
     for (let i = 0; i < heights.length; i++) {
-        if(stop){
+        if (stop) {
             break;
         }
         let min = 500;
@@ -117,22 +200,24 @@ async function selectionSort() {
         heights[i] = heights[minInd];
         heights[minInd] = temp;
 
-       
+
         a = setTimeout(() => {
-            if(!stop){
-            document.getElementById('' + i).style.backgroundColor = "red";
-            document.getElementById('' + minInd).style.backgroundColor = "red";
-            redraw(i, minInd);}
+            if (!stop) {
+                document.getElementById('' + i).style.backgroundColor = "red";
+                document.getElementById('' + minInd).style.backgroundColor = "red";
+                redraw(i, minInd);
+            }
 
         }, i * getNum(speed))
         setTimeout(() => {
-            if(!stop){
-            document.getElementById('' + i).style.backgroundColor = "blue";
-            document.getElementById('' + minInd).style.backgroundColor = "blue";}
+            if (!stop) {
+                document.getElementById('' + i).style.backgroundColor = "blue";
+                document.getElementById('' + minInd).style.backgroundColor = "blue";
+            }
         }, (i + 1) * getNum(speed))
 
     }
-    setTimeout(() => {return true;}, (((bars)*(bars-1))/2 ) * getNum(speed));
+    setTimeout(() => { return true; }, (((bars) * (bars - 1)) / 2) * getNum(speed));
 
 };
 
