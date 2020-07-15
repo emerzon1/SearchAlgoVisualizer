@@ -132,7 +132,7 @@ var setup = () => {
         const newDiv = document.createElement("div");
         newDiv.id = i;
         newDiv.className = "bar";
-        newDiv.style.width = width / (bars + 0.2 * bars) + "px";
+        newDiv.style.width = (bars==700) ? '1px' : width / (bars + 0.2 * bars) + "px";
         newDiv.style.height = heights[i] + "px";
         container.appendChild(newDiv);
     }
@@ -180,7 +180,7 @@ var redraw = (i, j) => {
     document.getElementById("" + j).style.height = temp;
 };
 var getNum = (speed) => {
-    return (speed == 'slow') ? 1500 : ((speed == 'medium') ? 1000 : ((speed == 'fast') ? 500 : (speed == "veryfast") ? 150 : 50));
+    return (speed == 'slow') ? 1500 : ((speed == 'medium') ? 1000 : ((speed == 'fast') ? 500 : (speed == "veryfast") ? 150 : (speed=='insane') ? 5 : 50));
 }
 
 async function selectionSort() {
