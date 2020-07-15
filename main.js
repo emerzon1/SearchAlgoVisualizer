@@ -5,10 +5,11 @@ let start = true;
 let bars = 50;
 let str = document.cookie
 let speed = "slow";
-
-//ars = str.slice(5, str.indexOf(';'))
+let a;
+let b;
+speed = str.slice(str.indexOf('speed') + 6, (str.indexOf('speed') != 0) ? str.length : str.indexOf(';'))
 console.log(speed);
-//speed = str.slice(str.indexOf('speed') + 6)
+bars = parseInt(str.slice(str.indexOf('bars') + 5, (str.indexOf('bars') != 0) ? str.length : str.indexOf(';')))
 console.log(bars);
 const NE = document.getElementById('numElements');
 const SPEED = document.getElementById('speed');
@@ -53,9 +54,7 @@ var setup = () => {
     }
 };
 var reset = () => {
-    stop = true;
-    setup();
-    stop = false;
+    location.reload();
 }
 document.addEventListener("DOMContentLoaded", () => {
     console.log('loaded');
@@ -66,9 +65,11 @@ document.getElementsByClassName("SSort")[0].addEventListener("click", () => {
         start = false;
         new Promise((resolve, reject) => {
             selectionSort();
-        }).then(() => {
+        })
+        .catch(() => {})
+        .then(() => {
             start = true;
-            resolve();
+
         })    
     }
     
@@ -81,7 +82,7 @@ var draw = () => {
     }
 };
 document.getElementsByClassName('reset')[0].addEventListener('click', () => {
-    setup();
+    location.reload();
 })
 var redraw = (i, j) => {
 
@@ -94,6 +95,7 @@ var redraw = (i, j) => {
 var getNum = (speed) => {
     return (speed=='slow') ? 1500 : ((speed=='medium') ? 1000 : ((speed=='fast') ? 500 : (speed=="veryfast") ? 150 : 50));
 }
+
 var selectionSort = () => {
     for (let i = 0; i < heights.length; i++) {
         if(stop){
@@ -112,15 +114,17 @@ var selectionSort = () => {
         heights[minInd] = temp;
 
        
-        setTimeout(() => {
+        a = setTimeout(() => {
+            if(!stop){
             document.getElementById('' + i).style.backgroundColor = "red";
             document.getElementById('' + minInd).style.backgroundColor = "red";
-            redraw(i, minInd);
+            redraw(i, minInd);}
 
         }, i * getNum(speed))
-        setTimeout(() => {
+        b = setTimeout(() => {
+            if(!stop){
             document.getElementById('' + i).style.backgroundColor = "blue";
-            document.getElementById('' + minInd).style.backgroundColor = "blue";
+            document.getElementById('' + minInd).style.backgroundColor = "blue";}
         }, (i + 1) * getNum(speed))
 
     }
