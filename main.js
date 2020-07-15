@@ -60,17 +60,21 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log('loaded');
     setup();
 });
+
 document.getElementsByClassName("SSort")[0].addEventListener("click", () => {
     if(start){
         start = false;
-        new Promise((resolve, reject) => {
-            selectionSort();
+        new Promise(async function(resolve, reject){
+            let b = await selectionSort();
+            console.log(b);
         })
-        .catch(() => {})
-        .then(() => {
-            start = true;
+        .then(() => {console.log('lol');})
+        .catch(() => {console.log('lol');start = true;})
+        //.catch(() => {})
+        //.then(() => {
+        //    start = true;
 
-        })    
+        //})    
     }
     
     //visualize(moves);
@@ -96,7 +100,7 @@ var getNum = (speed) => {
     return (speed=='slow') ? 1500 : ((speed=='medium') ? 1000 : ((speed=='fast') ? 500 : (speed=="veryfast") ? 150 : 50));
 }
 
-var selectionSort = () => {
+async function selectionSort() {
     for (let i = 0; i < heights.length; i++) {
         if(stop){
             break;
@@ -121,12 +125,14 @@ var selectionSort = () => {
             redraw(i, minInd);}
 
         }, i * getNum(speed))
-        b = setTimeout(() => {
+        setTimeout(() => {
             if(!stop){
             document.getElementById('' + i).style.backgroundColor = "blue";
             document.getElementById('' + minInd).style.backgroundColor = "blue";}
         }, (i + 1) * getNum(speed))
 
     }
+    setTimeout(() => {return true;}, (((bars)*(bars-1))/2 ) * getNum(speed));
+
 };
 
