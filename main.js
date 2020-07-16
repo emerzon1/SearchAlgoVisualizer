@@ -1,6 +1,4 @@
-let heights = []; //Change bars with user
-//Different sort algos
-//change speed
+let heights = []; //MERGE SORT, SWAPS, ARRAY ACCESSES, QUICK SORT, COUNTING SORT
 if (document.cookie.indexOf('bars') == -1) {
     document.cookie = 'bars=50';
 }
@@ -28,7 +26,7 @@ const width = window.innerWidth;
 var setHeights = () => {
     heights = [];
     for (let i = 0; i < bars; i++) {
-        heights.push(Math.random() * bars + 20);
+        heights.push(Math.random() * 500 + 20);
     }
 };
 document.getElementById('heapSort').addEventListener('click', () => {
@@ -36,8 +34,6 @@ document.getElementById('heapSort').addEventListener('click', () => {
         start = false;
         heapSort();
     }
-
-
 })
 let swaps = 0;
 async function maxHeap(i) {
@@ -188,7 +184,7 @@ async function selectionSort() {
         if (stop) {
             break;
         }
-        let min = 500;
+        let min = 5000;
         let minInd = i;
         for (let j = i; j < heights.length; j++) {
             if (heights[j] < min) {
