@@ -6,6 +6,7 @@
 
 <body>
     <h1>Sorting Algorithm Visualizer</h1>
+    
     <select id="numElements" name="numElements">
         <option value="25">25</option>
         <option value="50">50</option>
@@ -22,9 +23,11 @@
         <option value="insane">insane</option>
       </select>
       <button class="reset">Reset</button>
+      <span id="swaps">Number of Swaps: <span id="number">0</span></span> 
     <div class="container" id='container'></div>
     <button class="SSort">Selection Sort</button>
     <button id="heapSort">Heap Sort</button>
-
+    <button id="quickSort">Quick Sort</button>
+    <button id="mergeSort">Merge Sort</button>
     <script src="main.js"></script>
 </body>
