@@ -1,1 +1,1 @@
-# SearchAlgoVisualizer
+# SortAlgoVisualizer
